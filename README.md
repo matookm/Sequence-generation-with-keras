@@ -62,46 +62,6 @@ df['Title'] = title
 df['Category'] = cat
 ```
 
-
-    ---------------------------------------------------------------------------
-
-    ConnectionError                           Traceback (most recent call last)
-
-    <ipython-input-4-b11ecd4c37a0> in <module>()
-          2 api = finding(domain='svcs.sandbox.ebay.com', appid='MaayanMa-DSprojec-SBX-e8e06383e-67abf65d', config_file=None)
-          3 item_id, title, cat = [], [], []
-    ----> 4 collect_data(['9355','139973'])
-          5 collect_data(['11104','176985'])
-          6 df['ItemID'] = item_id
-    
-
-    <ipython-input-3-6ba7bd857691> in collect_data(cat)
-          3         for pn in range (1,50):
-          4             api.execute('findItemsAdvanced', {'categoryId' : cat, 
-    ----> 5                                               'paginationInput': {'entriesPerPage': '100', 'pageNumber': pn}})
-          6             dictstr = api.response_dict()
-          7             for item in dictstr.searchResult.item:
-    
-
-    C:\Users\matoo\Anaconda2\lib\site-packages\ebaysdk\connection.pyc in execute(self, verb, data, list_nodes, verb_attrs, files)
-        122         if hasattr(self.response, 'content'):
-        123             self.process_response()
-    --> 124             self.error_check()
-        125 
-        126         log.debug('total time=%s' % (time.time() - self._time))
-    
-
-    C:\Users\matoo\Anaconda2\lib\site-packages\ebaysdk\connection.pyc in error_check(self)
-        211         if estr and self.config.get('errors', True):
-        212             log.error(estr)
-    --> 213             raise ConnectionError(estr, self.response)
-        214 
-        215     def response_codes(self):
-    
-
-    ConnectionError: u"findItemsAdvanced: Internal Server Error, Domain: CoreRuntime, Severity: Error, errorId: 2030, Internal error: [com.ctc.wstx.exc.WstxLazyException] com.ctc.wstx.exc.WstxUnexpectedCharException: Unexpected character ' ' (code 32) (missing name?)\n at javax.xml.stream.SerializableLocation@31a231a2"
-
-
 Looking at our databaes
 
 
