@@ -34,10 +34,10 @@ We use ebay sdk package in order to collect all the records from three categorie
 
 
 ```python
-def collect_data(cat):
+def collect_data(cat_id):
     try:
         for pn in range (1,50):
-            api.execute('findItemsAdvanced', {'categoryId' : cat, 
+            api.execute('findItemsAdvanced', {'categoryId' : cat_id, 
                                               'paginationInput': {'entriesPerPage': '100', 'pageNumber': pn}})
             dictstr = api.response_dict()
             for item in dictstr.searchResult.item:
@@ -62,7 +62,11 @@ df['Title'] = title
 df['Category'] = cat
 ```
 
-Looking at our databaes
+    total pages available:  8
+    total pages available:  7
+    
+
+Looking at our database
 
 
 ```python
@@ -77,71 +81,60 @@ df.head(10)
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>ItemID</th>
       <th>Title</th>
-      <th>CategoryID</th>
+      <th>Category</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>110205984389</td>
       <td>Apple iPhone 6 Plus 64GB Space Gray LTE Cellul...</td>
-      <td>9355</td>
+      <td>Cell Phones &amp; Smartphones</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>110205978911</td>
       <td>Apple iPhone 5S 16GB Space Gray LTE Cellular A...</td>
-      <td>9355</td>
+      <td>Cell Phones &amp; Smartphones</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>110205982787</td>
       <td>Apple iPhone 6 64GB Space Gray LTE Cellular AT...</td>
-      <td>9355</td>
+      <td>Cell Phones &amp; Smartphones</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>110205984011</td>
       <td>Apple iPhone 6 64GB Silver LTE Cellular AT&amp;T M...</td>
-      <td>9355</td>
+      <td>Cell Phones &amp; Smartphones</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>110205985297</td>
       <td>Apple iPhone 5S 16GB Silver LTE Cellular Sprin...</td>
-      <td>9355</td>
+      <td>Cell Phones &amp; Smartphones</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>110205983931</td>
       <td>Apple iPhone 5 16GB Black LTE Cellular Straigh...</td>
-      <td>9355</td>
+      <td>Cell Phones &amp; Smartphones</td>
     </tr>
     <tr>
       <th>6</th>
-      <td>110205982867</td>
       <td>Apple iPhone 6 16GB Gold LTE Cellular Sprint M...</td>
-      <td>9355</td>
+      <td>Cell Phones &amp; Smartphones</td>
     </tr>
     <tr>
       <th>7</th>
-      <td>110205985429</td>
       <td>Apple iPhone 6 128GB Gold LTE Cellular Verizon...</td>
-      <td>9355</td>
+      <td>Cell Phones &amp; Smartphones</td>
     </tr>
     <tr>
       <th>8</th>
-      <td>110198623979</td>
       <td>Apple iPhone 6 Plus 64GB Silver LTE Cellular S...</td>
-      <td>9355</td>
+      <td>Cell Phones &amp; Smartphones</td>
     </tr>
     <tr>
       <th>9</th>
-      <td>110198624555</td>
       <td>Apple iPhone 6S 64GB Space Gray LTE Cellular A...</td>
-      <td>9355</td>
+      <td>Cell Phones &amp; Smartphones</td>
     </tr>
   </tbody>
 </table>
@@ -173,9 +166,8 @@ df.isnull().sum()
 
 
 
-    ItemID        0
-    Title         0
-    CategoryID    0
+    Title       0
+    Category    0
     dtype: int64
 
 
@@ -186,24 +178,24 @@ Let's look at our Categories - how many do we have from each one and what part d
 
 
 ```python
-print df.groupby('CategoryID').count()
-df['CategoryID'] = df['CategoryID'].astype('category')
-colors = ['blue', 'green','red','turquoise']
-labels = df.CategoryID.unique()
+print df.groupby('Category').count()
+df['Category'] = df['Category'].astype('category')
+colors = ['blue', 'green','red','purple']
+labels = df.Category.unique()
 fig = plt.figure(figsize=(10,5))
 ax1 = fig.add_subplot(121)
-df['CategoryID'].value_counts().plot(kind='bar', color = colors)
+df['Category'].value_counts().plot(kind='bar', color = colors)
 ax2 = fig.add_subplot(122)
-df['CategoryID'].value_counts().plot(kind = 'pie')
+df['Category'].value_counts().plot(kind = 'pie')
 plt.show()
 ```
 
-                Title
-    CategoryID       
-    11104         422
-    139973        228
-    176985       2120
-    9355          561
+                               Title
+    Category                        
+    Cell Phones & Smartphones    561
+    Cookbooks                    422
+    Records                     2120
+    Video Games                  228
     
 
 
@@ -224,16 +216,52 @@ first, we will load our database from the last part
 
 ```python
 df = pd.read_pickle(r'data')
-print df.head(5)
+df.head(5)
 ```
 
-                                                   Title CategoryID
-    0  Apple iPhone 6 Plus 64GB Space Gray LTE Cellul...       9355
-    1  Apple iPhone 5S 16GB Space Gray LTE Cellular A...       9355
-    2  Apple iPhone 6 64GB Space Gray LTE Cellular AT...       9355
-    3  Apple iPhone 6 64GB Silver LTE Cellular AT&T M...       9355
-    4  Apple iPhone 5S 16GB Silver LTE Cellular Sprin...       9355
-    
+
+
+
+<div>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Title</th>
+      <th>Category</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>Apple iPhone 6 Plus 64GB Space Gray LTE Cellul...</td>
+      <td>Cell Phones &amp; Smartphones</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>Apple iPhone 5S 16GB Space Gray LTE Cellular A...</td>
+      <td>Cell Phones &amp; Smartphones</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>Apple iPhone 6 64GB Space Gray LTE Cellular AT...</td>
+      <td>Cell Phones &amp; Smartphones</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>Apple iPhone 6 64GB Silver LTE Cellular AT&amp;T M...</td>
+      <td>Cell Phones &amp; Smartphones</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>Apple iPhone 5S 16GB Silver LTE Cellular Sprin...</td>
+      <td>Cell Phones &amp; Smartphones</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
 
 This function plots a confusion matrix
 
@@ -255,7 +283,7 @@ This function returns the train and test sets
 def extract_test_set(df, numOfFeatures, RemoveStopWords):
     stops = set(stopwords.words('english'))
     corpus = np.array(df.Title.values).tolist()
-    target = np.array(df['CategoryID'].values)
+    target = np.array(df['Category'].values)
     if RemoveStopWords:
         vectorizer = TfidfVectorizer(stop_words='english', max_features=numOfFeatures, analyzer='word', ngram_range=(1, 1))
     else:
@@ -291,6 +319,7 @@ def Classify(vector_length, model, data, target, kf, mod_name,plot_cn):
     if plot_cn == True:
         for i in range(0,9):
             cms = np.mean(cm, axis=0)
+        cms = cms * kf.n_folds
         plot_cnf_matrix(cms, classes, mod_name, vector_length)
     return accuracy
 ```
@@ -330,13 +359,13 @@ print scoreTable
 
                       5         7         10        20        50        100
     Naive Bayes  0.685983  0.680576  0.771844  0.874813  0.948361  0.958269
-    DT           0.904230  0.909036  0.915939  0.948360  0.969075  0.968175
-    KNN          0.901828  0.910237  0.913237  0.943856  0.964273  0.963974
+    DT           0.904230  0.909036  0.915939  0.949261  0.967874  0.968175
+    KNN          0.901828  0.910237  0.913237  0.944456  0.964874  0.964274
     Linear SVM   0.904831  0.912337  0.916840  0.949862  0.969976  0.971177
     
 
 We can see that a vector length of 20 gives us an accuracy that is over 80% with all four algorithms.
-now, we'll look at some confusion matrices.
+now, we'll look at some confusion matrices. Each number represents a single item.
 
 The first confusion matrix will be with Naive Bayes:
 
@@ -349,12 +378,14 @@ accuracies.append(Classify(20, nbayes, data, target, kf, 'Naive Bayes', True))
     
 
 
-    <matplotlib.figure.Figure at 0xdd155f8>
+    <matplotlib.figure.Figure at 0x10da3908>
 
 
 
 ![png](output_30_2.png)
 
+
+We can see that our classifier is accurate at most with the records category, maybe because it has a lot more items than the rest. The biggest error is when classifying video games as records (55 items).
 
 The second confusion matrix will be with Linear SVM:
 
@@ -367,12 +398,14 @@ accuracies.append(Classify(20, svm, data, target, kf, 'Linear SVM', True))
     
 
 
-    <matplotlib.figure.Figure at 0xe43e6a0>
+    <matplotlib.figure.Figure at 0xf06c208>
 
 
 
 ![png](output_32_2.png)
 
+
+We can see that this model classify cell phones and smartphones better than the first model, but comfuses more with video games classification.
 
 The third confusion matrix will be with deceision tree:
 
@@ -385,12 +418,14 @@ accuracies.append(Classify(20, dtree, data, target, kf, 'DT', True))
     
 
 
-    <matplotlib.figure.Figure at 0xe256940>
+    <matplotlib.figure.Figure at 0xf200208>
 
 
 
 ![png](output_34_2.png)
 
+
+DT has approximately the same results as SVM.
 
 The last confusion matrix will be with KNN:
 
@@ -403,9 +438,11 @@ accuracies.append(Classify(20, knn, data, target, kf, 'KNN', True))
     
 
 
-    <matplotlib.figure.Figure at 0xe0036d8>
+    <matplotlib.figure.Figure at 0xea110f0>
 
 
 
 ![png](output_36_2.png)
 
+
+KNN has the biggest error in classifying records (2 times than the other models).
