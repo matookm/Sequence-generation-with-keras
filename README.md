@@ -62,8 +62,8 @@ df['Title'] = title
 df['Category'] = cat
 ```
 
-    total pages available:  8
-    total pages available:  7
+    total pages available:  44
+    total pages available:  37
     
 
 Looking at our database
@@ -152,7 +152,7 @@ print "number of rows after: ", df.shape[0]
 df = df.drop('ItemID',axis = 1)
 ```
 
-    number of rows before:  3331
+    number of rows before:  6392
     number of rows after:  3331
     
 
